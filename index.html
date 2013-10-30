@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>it's my test</title>
+	<script src="socket_io.js"></script>
+	<script>
+		var socketURL = 'http://localhost:8081';
+
+		var socket = io.connect( socketURL ),
+			rooms;
+		
+		socket.on('news', function (data) {
+			console.log(data);
+			socket.emit('my other event', { my: 'data' });
+		});
+
+		socket.on("createRoomSucc", function( data ){
+			console.log("you create a room, id is:" + data );
+		});
+
+		socket.on("roomListUpdate", function( data ){
+			console.log("room list has been updated" );
+			rooms = data;
+			showRooms();
+		});
+
+		function showRooms(){
+			var str = "";
+
+			for (var i = 0; i < rooms.length; i++) {
+				str += "room" + rooms[i] + ": is opend, ";
+			};
+
+			console.log( str );
+		}
+
+		function createRoom(){
+			socket.emit("createRoom" );
+		}
+	</script>
+</head>
+<body>
+	it's my rooms test, plz use it by command;
+</body>
+</html>
